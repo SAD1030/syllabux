@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
 
 import routes from './routes/index.js';
 import authRouter from './routes/auth.js';
@@ -15,6 +17,12 @@ app.use(helmet());
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(YAML.load('./src/swagger.yaml')),
+);
 
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
