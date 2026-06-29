@@ -7,7 +7,7 @@ export async function register(req, res, next) {
     if (!first_name || !last_name || !email || !password || !role) {
       throw new HttpError(
         400,
-        'first_name, last_name, email, password, role are required'
+        'first_name, last_name, email, password, role are required',
       );
     }
     if (!['student', 'instructor', 'admin'].includes(role)) {
@@ -29,13 +29,10 @@ export async function register(req, res, next) {
 export async function login(req, res, next) {
   try {
     const { email, password, remember_me } = req.body ?? {};
-    if (!email || !password) {
-      throw new HttpError(400, 'email and password are required');
+    if (!email || !password || !remember_me) {
+      throw new HttpError(400, 'email, password and remember me are required');
     }
-    if(typeof remember_me !== "boolean"){
-      throw new HttpError(400, 'Remember me should be boolean');
-    }
-    const result = await authService.login({ email, password, remember_me});
+    const result = await authService.login({ email, password, remember_me });
     if (!result) throw new HttpError(401, 'Invalid credentials');
     res.json(result);
   } catch (err) {
@@ -43,16 +40,16 @@ export async function login(req, res, next) {
   }
 }
 
-export async function tokenValidator(req, res, next){
-  try{
-    const {token} = req.body ?? {};
-    if(!token || token.trim() === ''){
+export async function tokenValidator(req, res, next) {
+  try {
+    const { token } = req.body ?? {};
+    if (!token || token.trim() === '') {
       throw new HttpError(401, 'Invalid token');
     }
     const result = await authService.tokenValidator(token);
     if (!result) throw new HttpError(401, 'Invalid token');
     res.json(result);
-  }catch(error){
+  } catch (error) {
     next(err);
   }
 }

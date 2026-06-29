@@ -79,12 +79,12 @@ export async function tokenValidator(token){
     if(rows.length > 0){
       return {
         isValid: true,
-        mesage: 'The token is valid'
+        message: 'The token is valid'
       };
     }else{
       return {
         isValid: false,
-        messages: 'The token is invalid'
+        message: 'The token is invalid'
       };
     }
   }catch(error){
