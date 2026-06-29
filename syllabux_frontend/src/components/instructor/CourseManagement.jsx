@@ -1,6 +1,10 @@
+import { useState } from 'react'
 import InstructorCourseCard from './InstructorCourseCard'
+import InstructorModuleList from './InstructorModuleList'
 
 function CourseManagement({ courses }) {
+  const [selectedCourse, setSelectedCourse] = useState(null)
+
   return (
     <section className="flex flex-col gap-6 md:col-span-8">
       <div className="flex items-center justify-between">
@@ -17,9 +21,20 @@ function CourseManagement({ courses }) {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {courses.map((course) => (
-          <InstructorCourseCard key={course.id} course={course} />
+          <InstructorCourseCard
+            key={course.id}
+            course={course}
+            onViewModules={setSelectedCourse}
+          />
         ))}
       </div>
+
+      {selectedCourse && (
+        <InstructorModuleList
+          courseTitle={selectedCourse.title}
+          modules={selectedCourse.modules ?? []}
+        />
+      )}
     </section>
   )
 }
